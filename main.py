@@ -1,13 +1,20 @@
+
+
+
 class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
 
+    def __lt__(self, other):
+        return self.data < other.data
+
+
 class LinkedList:
     def __init__(self):
         self.head = None
 
-    def append(self, data):
+    def add_node(self, data):
         new_node = Node(data)
         if self.head is None:
             self.head = new_node
@@ -17,37 +24,42 @@ class LinkedList:
                 current = current.next
             current.next = new_node
 
-    def sort(self):
-        if self.head is None:
-            return
-
-        swapped = True
-        while swapped:
-            current = self.head
-            swapped = False
-            while current.next:
-                if current.data > current.next.data:
-                    current.data, current.next.data = current.next.data, current.data
-                    swapped = True
-                current = current.next
-
     def display(self):
+        elements = []
         current = self.head
         while current:
-            print(current.data, end=' ')
+            elements.append(current.data)
             current = current.next
-        print()
+        print(elements)
+        return elements
 
 
-data = input("Введите элементы списка через пробел: ").split()
-linked_list = LinkedList()
-for item in data:
-    linked_list.append(int(item))
+    def __iter__(self):
+        current = self.head
+        while current:
+            yield current
+            current = current.next
 
-print("Исходный список:")
-linked_list.display()
 
-linked_list.sort()
+def main():
+    linked_list = LinkedList()
+    data = list(map(int, input("Enter the elements of the array separated by space: ").split()))
+    for item in data:
+        linked_list.add_node(item)
+    print("Unsorted linked list:")
+    linked_list.display()
 
-print("Отсортированный список:")
-linked_list.display()
+    sorted_list = sorted([node.data for node in linked_list])
+    sorted_linked_list = LinkedList()
+    for item in sorted_list:
+        sorted_linked_list.add_node(item)
+
+    print("Sorted linked list:")
+    sorted_linked_list.display()
+
+
+if __name__ == "__main__":
+    main()
+
+
+
